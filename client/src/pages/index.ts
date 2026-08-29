@@ -1,0 +1,9 @@
+export { HomePage } from './HomePage';
+export { VenuesPage } from './VenuesPage';
+export { VenueDetailPage } from './VenueDetailPage';
+export { LoginPage } from './LoginPage';
+export { RegisterPage } from './RegisterPage';
+export { BookingsPage } from './BookingsPage';
+export { ProfilePage } from './ProfilePage';
+export { DashboardPage } from './DashboardPage';
+export { NotFoundPage } from './NotFoundPage';

@@ -1,0 +1,1 @@
+export { LoginForm, RegisterForm, ForgotPasswordForm } from './AuthForms';
