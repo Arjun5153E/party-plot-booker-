@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { Review, IReview } from '../models';
-import { Booking } from '../models';
-import { AuthRequest } from '../middleware/auth';
-import { asyncHandler, NotFoundError, ForbiddenError, ValidationError } from '../middleware/errorHandler';
+import mongoose from 'mongoose';
+import { Review, IReview, Booking, Venue } from '../models/index.js';
+import { AuthRequest } from '../middleware/auth.js';
+import { asyncHandler, NotFoundError, ForbiddenError, ValidationError } from '../middleware/errorHandler.js';
 
 export const createReview = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
   if (!req.user) {
@@ -45,7 +45,7 @@ export const createReview = asyncHandler(async (req: AuthRequest, res: Response)
   const venueReviews = await Review.find({ venue: venueId });
   const avgRating = venueReviews.reduce((sum, r) => sum + r.rating.overall, 0) / venueReviews.length;
 
-  await (await import('../models')).Venue.findByIdAndUpdate(venueId, {
+  await Venue.findByIdAndUpdate(venueId, {
     'rating.average': Math.round(avgRating * 10) / 10,
     'rating.count': venueReviews.length
   });
@@ -74,7 +74,7 @@ export const getVenueReviews = asyncHandler(async (req: Request, res: Response):
   ]);
 
   const ratingDistribution = await Review.aggregate([
-    { $match: { venue: (await import('mongoose')).default.Types.ObjectId(venueId) } },
+    { $match: { venue: new mongoose.Types.ObjectId(venueId) } },
     { $group: { _id: '$rating.overall', count: { $sum: 1 } } },
     { $sort: { _id: -1 } }
   ]);
@@ -116,7 +116,7 @@ export const updateReview = asyncHandler(async (req: AuthRequest, res: Response)
   const venueReviews = await Review.find({ venue: review.venue });
   const avgRating = venueReviews.reduce((sum, r) => sum + r.rating.overall, 0) / venueReviews.length;
 
-  await (await import('../models')).Venue.findByIdAndUpdate(review.venue, {
+  await Venue.findByIdAndUpdate(review.venue, {
     'rating.average': Math.round(avgRating * 10) / 10,
     'rating.count': venueReviews.length
   });
@@ -150,7 +150,7 @@ export const deleteReview = asyncHandler(async (req: AuthRequest, res: Response)
     ? venueReviews.reduce((sum, r) => sum + r.rating.overall, 0) / venueReviews.length 
     : 0;
 
-  await (await import('../models')).Venue.findByIdAndUpdate(venueId, {
+  await Venue.findByIdAndUpdate(venueId, {
     'rating.average': Math.round(avgRating * 10) / 10,
     'rating.count': venueReviews.length
   });

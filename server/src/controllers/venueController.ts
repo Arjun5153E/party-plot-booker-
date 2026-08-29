@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { Venue, IVenue, User, Booking } from '../models';
-import { AuthRequest } from '../middleware/auth';
-import { asyncHandler, NotFoundError, ForbiddenError } from '../middleware/errorHandler';
+import { Venue, IVenue, User, Booking } from '../models/index.js';
+import { AuthRequest } from '../middleware/auth.js';
+import { asyncHandler, NotFoundError, ForbiddenError } from '../middleware/errorHandler.js';
 
 interface VenueQuery {
   page?: number;
