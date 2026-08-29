@@ -8,7 +8,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cookieParser from 'cookie-parser';
 
-import { routes } from './routes';
+// Change this line if your routes folder contains index.ts or separate router files:
+import { routes } from './routes/index'; 
 import { errorHandler } from './middleware/errorHandler';
 import { sanitizeInput } from './middleware/validation';
 
