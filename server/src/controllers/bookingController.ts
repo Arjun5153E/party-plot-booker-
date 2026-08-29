@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import { Booking, IBooking, BookingStatus } from '../models';
-import { Venue } from '../models';
-import { AuthRequest } from '../middleware/auth';
-import { asyncHandler, NotFoundError, ForbiddenError, ValidationError } from '../middleware/errorHandler';
-import { io } from '../index';
+import { Booking, IBooking, BookingStatus, Venue } from '../models/index.js';
+import { AuthRequest } from '../middleware/auth.js';
+import { asyncHandler, NotFoundError, ForbiddenError, ValidationError } from '../middleware/errorHandler.js';
+import { io } from '../index.js';
 
 export const createBooking = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
   if (!req.user) {
@@ -31,7 +30,7 @@ export const createBooking = asyncHandler(async (req: AuthRequest, res: Response
   const endDate = new Date(dates.endDate);
 
   const isBlocked = venue.availability.blockedDates.some(
-    date => date >= startDate && date <= endDate
+    (date: Date) => date >= startDate && date <= endDate
   );
 
   if (isBlocked) {
@@ -128,8 +127,12 @@ export const getBooking = asyncHandler(async (req: AuthRequest, res: Response): 
     throw new NotFoundError('Booking');
   }
 
-  if (booking.user._id.toString() !== req.user._id.toString() && 
-      booking.venue.owner.toString() !== req.user._id.toString() && 
+  // Cast populated fields to any to prevent TypeScript "Property does not exist on type ObjectId" errors
+  const populatedUser = booking.user as any;
+  const populatedVenue = booking.venue as any;
+
+  if (populatedUser._id.toString() !== req.user._id.toString() && 
+      populatedVenue.owner.toString() !== req.user._id.toString() && 
       req.user.role !== 'admin') {
     throw new ForbiddenError('Not authorized to view this booking');
   }
@@ -317,6 +320,7 @@ export const addCommunication = asyncHandler(async (req: AuthRequest, res: Respo
   }
 
   const isOwner = venue.owner.toString() === req.user._id.toString();
+  // Casting to safely extract the string from a potential ObjectId
   const isUser = booking.user.toString() === req.user._id.toString();
 
   if (!isOwner && !isUser && req.user.role !== 'admin') {
