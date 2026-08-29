@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Venue, IVenue } from '../models';
+import { Venue, IVenue, User, Booking } from '../models';
 import { AuthRequest } from '../middleware/auth';
 import { asyncHandler, NotFoundError, ForbiddenError } from '../middleware/errorHandler';
 
@@ -146,7 +146,7 @@ export const updateVenue = asyncHandler(async (req: AuthRequest, res: Response):
     return;
   }
 
-  const venue = await Venue.findById(req.params.id);
+  const venue: any = await Venue.findById(req.params.id);
   if (!venue) {
     throw new NotFoundError('Venue');
   }
@@ -172,7 +172,7 @@ export const deleteVenue = asyncHandler(async (req: AuthRequest, res: Response):
     return;
   }
 
-  const venue = await Venue.findById(req.params.id);
+  const venue: any = await Venue.findById(req.params.id);
   if (!venue) {
     throw new NotFoundError('Venue');
   }
@@ -219,10 +219,10 @@ export const checkAvailability = asyncHandler(async (req: Request, res: Response
   const end = new Date(endDate as string);
 
   const isBlocked = venue.availability.blockedDates.some(
-    date => date >= start && date <= end
+    (date: Date) => date >= start && date <= end
   );
 
-  const existingBookings = await (await import('../models')).Booking.find({
+  const existingBookings: any[] = await Booking.find({
     venue: venueId,
     status: { $in: ['pending', 'confirmed'] },
     $or: [
@@ -231,7 +231,7 @@ export const checkAvailability = asyncHandler(async (req: Request, res: Response
   });
 
   const bookedDates: Date[] = [];
-  existingBookings.forEach(booking => {
+  existingBookings.forEach((booking: any) => {
     const bookingStart = new Date(booking.dates.startDate);
     const bookingEnd = new Date(booking.dates.endDate);
     for (let d = new Date(bookingStart); d <= bookingEnd; d.setDate(d.getDate() + 1)) {
@@ -286,23 +286,27 @@ export const toggleFavorite = asyncHandler(async (req: AuthRequest, res: Respons
   }
 
   const { venueId } = req.params;
-  const user = await User.findById(req.user._id);
+  const user: any = await User.findById(req.user._id);
 
-  const venueIndex = user!.favoriteVenues.indexOf(venueId as any);
+  if (!user) {
+    throw new NotFoundError('User');
+  }
+
+  const venueIndex = user.favoriteVenues.indexOf(venueId as any);
   let isFavorite = false;
 
   if (venueIndex > -1) {
-    user!.favoriteVenues.splice(venueIndex, 1);
+    user.favoriteVenues.splice(venueIndex, 1);
   } else {
-    user!.favoriteVenues.push(venueId as any);
+    user.favoriteVenues.push(venueId as any);
     isFavorite = true;
   }
 
-  await user!.save();
+  await user.save();
 
   res.status(200).json({
     success: true,
     isFavorite,
-    favorites: user!.favoriteVenues
+    favorites: user.favoriteVenues
   });
 });

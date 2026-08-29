@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { User, IUser } from '../models';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
+const JWT_SECRET: jwt.Secret = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 export interface AuthRequest extends Request {
@@ -11,7 +11,10 @@ export interface AuthRequest extends Request {
 }
 
 export const generateToken = (userId: string): string => {
-  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  const options: SignOptions = {
+    expiresIn: JWT_EXPIRES_IN as any
+  };
+  return jwt.sign({ id: userId }, JWT_SECRET, options);
 };
 
 export const verifyToken = (token: string): { id: string } | null => {
