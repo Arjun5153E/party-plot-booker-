@@ -21,8 +21,3 @@ services:
       - key: CLIENT_URL
         value: "https://your-app-name.netlify.app"
     autoDeploy: true
-
-databases:
-  - name: party-plot-booker-db
-    databaseName: party-plot-booker
-    plan: free
