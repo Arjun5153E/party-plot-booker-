@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: party-plot-booker-api
+    rootDir: server
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: "7d"
+      - key: CLIENT_URL
+        value: "https://your-app-name.netlify.app"
+    autoDeploy: true
+
+databases:
+  - name: party-plot-booker-db
+    databaseName: party-plot-booker
+    plan: free
