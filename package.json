@@ -13,6 +13,9 @@
     "seed": "npm run seed --prefix server"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
     "concurrently": "^8.2.2"
   },
   "engines": {
