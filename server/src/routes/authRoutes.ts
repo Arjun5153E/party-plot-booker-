@@ -19,8 +19,8 @@ router.post('/register', validate([
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('phone').optional().isMobilePhone().withMessage('Valid phone number required'),
-  body('role').optional().isIn(['user', 'venue_owner']).withMessage('Invalid role')
+  body('phone').optional({ nullable: true }).isMobilePhone('any').withMessage('Valid phone number required'),
+  body('role').optional({ nullable: true }).isIn(['user', 'venue_owner']).withMessage('Invalid role')
 ]), register);
 
 router.post('/login', validate([
@@ -31,12 +31,12 @@ router.post('/login', validate([
 router.post('/logout', logout);
 router.get('/me', protect, getMe);
 router.put('/profile', protect, validate([
-  body('name').optional().trim().notEmpty(),
-  body('phone').optional().isMobilePhone(),
-  body('address.street').optional().isString(),
-  body('address.city').optional().isString(),
-  body('address.state').optional().isString(),
-  body('address.zipCode').optional().isString()
+  body('name').optional({ nullable: true }).trim().notEmpty(),
+  body('phone').optional({ nullable: true }).isMobilePhone('any'),
+  body('address.street').optional({ nullable: true }).isString(),
+  body('address.city').optional({ nullable: true }).isString(),
+  body('address.state').optional({ nullable: true }).isString(),
+  body('address.zipCode').optional({ nullable: true }).isString()
 ]), updateProfile);
 router.put('/password', protect, validate([
   body('currentPassword').notEmpty().withMessage('Current password required'),
