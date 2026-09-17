@@ -16,6 +16,9 @@
     "netlify:build": "npm run build && npm run build:api"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^8.0.0",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
