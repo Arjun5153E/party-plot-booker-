@@ -1,0 +1,184 @@
+[build]
+  command = "npm run netlify:build"
+  publish = "client/dist"
+  functions = "netlify/functions/dist"
+
+[[redirects]]
+  from = "/api/health"
+  to = "/.netlify/functions/health"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/register"
+  to = "/.netlify/functions/auth/register"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/login"
+  to = "/.netlify/functions/auth/login"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/logout"
+  to = "/.netlify/functions/auth/logout"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/me"
+  to = "/.netlify/functions/auth/me"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/profile"
+  to = "/.netlify/functions/auth/updateProfile"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/password"
+  to = "/.netlify/functions/auth/updatePassword"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/forgot-password"
+  to = "/.netlify/functions/auth/forgotPassword"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/reset-password"
+  to = "/.netlify/functions/auth/resetPassword"
+  status = 200
+
+[[redirects]]
+  from = "/api/venues"
+  to = "/.netlify/functions/venues/getVenues"
+  status = 200
+
+[[redirects]]
+  from = "/api/venues/:id"
+  to = "/.netlify/functions/venues/getVenue"
+  status = 200
+
+[[redirects]]
+  from = "/api/venues"
+  to = "/.netlify/functions/venues/createVenue"
+  status = 200
+  conditions = {Method = ["POST"]}
+
+[[redirects]]
+  from = "/api/venues/:id"
+  to = "/.netlify/functions/venues/updateVenue"
+  status = 200
+  conditions = {Method = ["PUT"]}
+
+[[redirects]]
+  from = "/api/venues/:id"
+  to = "/.netlify/functions/venues/deleteVenue"
+  status = 200
+  conditions = {Method = ["DELETE"]}
+
+[[redirects]]
+  from = "/api/venues/my-venues"
+  to = "/.netlify/functions/venues/getMyVenues"
+  status = 200
+
+[[redirects]]
+  from = "/api/venues/:id/availability"
+  to = "/.netlify/functions/venues/checkAvailability"
+  status = 200
+
+[[redirects]]
+  from = "/api/venues/nearby"
+  to = "/.netlify/functions/venues/getNearbyVenues"
+  status = 200
+
+[[redirects]]
+  from = "/api/venues/:id/favorite"
+  to = "/.netlify/functions/venues/toggleFavorite"
+  status = 200
+  conditions = {Method = ["POST"]}
+
+[[redirects]]
+  from = "/api/bookings"
+  to = "/.netlify/functions/bookings/createBooking"
+  status = 200
+  conditions = {Method = ["POST"]}
+
+[[redirects]]
+  from = "/api/bookings"
+  to = "/.netlify/functions/bookings/getBookings"
+  status = 200
+
+[[redirects]]
+  from = "/api/bookings/:id"
+  to = "/.netlify/functions/bookings/getBooking"
+  status = 200
+
+[[redirects]]
+  from = "/api/bookings/:id/status"
+  to = "/.netlify/functions/bookings/updateBookingStatus"
+  status = 200
+  conditions = {Method = ["PUT"]}
+
+[[redirects]]
+  from = "/api/bookings/:id"
+  to = "/.netlify/functions/bookings/cancelBooking"
+  status = 200
+  conditions = {Method = ["DELETE"]}
+
+[[redirects]]
+  from = "/api/bookings/venue/:venueId"
+  to = "/.netlify/functions/bookings/getVenueBookings"
+  status = 200
+
+[[redirects]]
+  from = "/api/bookings/:id/communicate"
+  to = "/.netlify/functions/bookings/addCommunication"
+  status = 200
+  conditions = {Method = ["POST"]}
+
+[[redirects]]
+  from = "/api/reviews/venue/:venueId"
+  to = "/.netlify/functions/reviews/getVenueReviews"
+  status = 200
+
+[[redirects]]
+  from = "/api/reviews"
+  to = "/.netlify/functions/reviews/createReview"
+  status = 200
+  conditions = {Method = ["POST"]}
+
+[[redirects]]
+  from = "/api/reviews/:id"
+  to = "/.netlify/functions/reviews/updateReview"
+  status = 200
+  conditions = {Method = ["PUT"]}
+
+[[redirects]]
+  from = "/api/reviews/:id"
+  to = "/.netlify/functions/reviews/deleteReview"
+  status = 200
+  conditions = {Method = ["DELETE"]}
+
+[[redirects]]
+  from = "/api/reviews/:id/response"
+  to = "/.netlify/functions/reviews/addOwnerResponse"
+  status = 200
+  conditions = {Method = ["POST"]}
+
+[[redirects]]
+  from = "/api/reviews/:id/helpful"
+  to = "/.netlify/functions/reviews/markHelpful"
+  status = 200
+  conditions = {Method = ["POST"]}
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["netlify/functions/**/*"]
+
+[build.environment]
+  NODE_VERSION = "18"
