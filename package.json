@@ -8,7 +8,7 @@
     "server": "npm run dev --prefix server",
     "client": "npm run dev --prefix client",
     "build": "npm run build --prefix client",
-    "build:api": "tsc --project tsconfig.netlify.json",
+    "build:api": "npm install --prefix netlify/functions && tsc --project tsconfig.netlify.json",
     "start": "npm run start --prefix server",
     "install:all": "npm install && npm install --prefix server && npm install --prefix client && npm install --prefix netlify/functions",
     "seed": "npm run seed --prefix server",
